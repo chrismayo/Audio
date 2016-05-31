@@ -23,7 +23,8 @@ HEADERS  += winmain_menu.h \
     MusicList/musiclistmodel.h \
     MusicList/musiclistview.h \
     MusicList/musiclistdelegate.h \
-    MusicList/listwidget.h
+    MusicList/listwidget.h \
+    GlobalData/globalData.h
 
 RESOURCES += \
     src.qrc

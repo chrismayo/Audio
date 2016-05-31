@@ -2,7 +2,12 @@
 #define LISTWIDGET_H
 
 #include <QWidget>
-class QTableWidget;
+class MusicListDelegate;
+class MusicListModel;
+class MusicListView;
+class QPushButton;
+class QHBoxLayout;
+class QVBoxLayout;
 class ListWidget : public QWidget
 {
     Q_OBJECT
@@ -11,10 +16,17 @@ public:
 
 private:
     void initialization();
+    void setWindosLayout();
+    void setMyStyle();
 
 private:
-    QTableWidget* p_typeWidget;
+    QPushButton* p_singerBtn, *p_albumsBtn, *p_singBtn, *p_sacnf;
+    MusicListDelegate* p_musicListDelegate;
+    MusicListModel* p_musicListModel;
+    MusicListView* p_musicListView;
 
+    QHBoxLayout* p_titleLayout, *p_bottomLayout;
+    QVBoxLayout* p_mainLayout;
 };
 
 #endif // LISTWIDGET_H
