@@ -5,6 +5,8 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QFileDialog>
+#include <QDebug>
 ListWidget::ListWidget(QWidget *parent) :
     QWidget(parent)
   , p_singerBtn(NULL), p_albumsBtn(NULL), p_singBtn(NULL)
@@ -19,6 +21,24 @@ ListWidget::ListWidget(QWidget *parent) :
     initialization();
     setWindosLayout();
     setMyStyle();
+    connectSigAndSlot();
+}
+
+void ListWidget::slotSearchSongClicked()
+{
+    m_mp3PathList.clear();
+    static QFileDialog fd;
+    fd.setDirectory(QDir("/home/"));
+    fd.setWindowTitle("扫描音乐文件");
+    fd.setFileMode(QFileDialog::Directory);
+    fd.show();
+    connect(&fd, SIGNAL(urlSelected(QUrl)), this, SLOT(slotGetDirectName(QUrl)));
+}
+
+void ListWidget::slotGetDirectName(QUrl url)
+{
+    /** 获取mp3 文件路径  **/
+    traversalFile(url.path());
 }
 
 void ListWidget::initialization()
@@ -101,4 +121,25 @@ void ListWidget::setWindosLayout()
 void ListWidget::setMyStyle()
 {
     setStyleSheet("QPushButton{background-color: rgb(255, 255, 255);}");
+}
+
+void ListWidget::connectSigAndSlot()
+{
+    connect(p_sacnf, SIGNAL(clicked()), this, SLOT(slotSearchSongClicked()));
+}
+
+void ListWidget::traversalFile(QString str)
+{
+    QDir dir(str);
+    foreach (QFileInfo mfi, dir.entryInfoList()) {
+        if(mfi.isFile()) {
+            if(mfi.fileName().contains(".mp3")) {
+                m_mp3PathList << mfi.absoluteFilePath();
+            }
+        } else {
+            if(mfi.fileName() == "." || mfi.fileName() == "..")
+                continue;
+            traversalFile(mfi.absoluteFilePath());
+        }
+    }
 }
